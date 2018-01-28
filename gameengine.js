@@ -52,6 +52,10 @@ GameEngine.prototype.startInput = function () {
           console.log("up");
           that.upButton = true;
         }
+        if (e.keyCode == 88) {
+          console.log("headbutt");
+          that.xButton = true;
+        }
         //        console.log(e);
 
         e.preventDefault();
@@ -71,6 +75,10 @@ GameEngine.prototype.startInput = function () {
         if (e.keyCode == 38 || e.keyCode == 87) {
           console.log("up");
           that.upButton = false;
+        }
+        if (e.keyCode == 88) {
+          console.log("headbutt");
+          that.xButton = false;
         }
         console.log("Key Up Event - Char " + e.code + " Code " + e.keyCode);
     }, false);
@@ -176,6 +184,7 @@ GameEngine.prototype.loop = function () {
     this.rightButton = null;
     this.leftButton = null;
     this.upButton = null;
+    this.xButton = null;
 }
 
 function Timer() {

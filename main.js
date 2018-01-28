@@ -162,9 +162,9 @@ Plumbus.prototype.update = function () {
 }
 
 function Hero(game, spritesheet) {
-    this.leftAnimation = new Animation(spritesheet, 0, 50, 32, 50, 0.15, 4, true);
-    this.rightAnimation = new Animation(spritesheet, 0, 100, 32, 50, 0.15, 4, true);
-    this.animation = new Animation(spritesheet, 0, 150, 32, 50, 0.15, 0, true);
+    this.leftAnimation = new Animation(spritesheet, 0, 50, 32, 50, 0.15, 4, true, true);
+    this.rightAnimation = new Animation(spritesheet, 0, 100, 32, 50, 0.15, 4, true, true);
+    this.animation = new Animation(spritesheet, 0, 150, 32, 50, 0.15, 1, true, true);
     this.x = 100;
     this.y = 280;
     this.speed = 5;
@@ -236,6 +236,50 @@ Hero.prototype.update = function () {
     }
 }
 
+function Puncher(game, spritesheet) {
+    this.punchAnimation = new Animation(spritesheet, 55, 15, 55, 65, 0.07, 5, false, true);
+    this.animation = new Animation(spritesheet, 0, 15, 55, 65, 0.01, 1, true, true);
+    this.x = 10;
+    this.y = 265;
+    this.speed = 5;
+    this.game = game;
+    this.Right = false;
+    this.Left = false;
+    this.Up = false;
+    this.xButton = false;
+    this.ctx = game.ctx;
+}
+
+Puncher.prototype.draw = function () {
+  if (this.xButton) {
+    this.punchAnimation.drawFrame(this.game.clockTick, this.ctx, this.x + 150, this.y + 100, 1.5);
+  } else {
+	   this.animation.drawFrame(this.game.clockTick, this.ctx, this.x + 150, this.y + 100, 1.5);
+  }
+}
+
+Puncher.prototype.update = function () {
+    //if (this.animation.elapsedTime < this.animation.totalTime * 8 / 14)
+    //this.x += this.game.clockTick * this.speed;
+    //if (this.x > 400) this.x = 0;
+
+    if (this.game.xButton) {
+      this.xButton = true;
+    } else {
+      if (this.punchAnimation.isDone()) {
+          this.punchAnimation.elapsedTime = 0;
+          this.xButton = false;
+      }
+    }
+    if (this.xButton) {
+      if (this.punchAnimation.isDone()) {
+          this.punchAnimation.elapsedTime = 0;
+          this.xButton = false;
+      }
+    }
+
+}
+
 function Helicopter(game, spritesheet) {
     this.animation = new Animation(spritesheet, 0, 0, 423, 150, 0.2, 4, 1, true);
     this.speed = 350;
@@ -263,6 +307,7 @@ AM.queueDownload("./img/fever.png");
 AM.queueDownload("./img/enem.png");
 AM.queueDownload("./img/plumbus.png");
 AM.queueDownload("./img/helicopter.png");
+AM.queueDownload("./img/headbutt.png");
 
 AM.downloadAll(function () {
     var canvas = document.getElementById("gameWorld");
@@ -275,6 +320,7 @@ AM.downloadAll(function () {
     gameEngine.addEntity(new Plumbus(gameEngine, AM.getAsset("./img/plumbus.png")));
     gameEngine.addEntity(new Helicopter(gameEngine, AM.getAsset("./img/helicopter.png")));
     gameEngine.addEntity(new Hero(gameEngine, AM.getAsset("./img/fever.png")));
+    gameEngine.addEntity(new Puncher(gameEngine, AM.getAsset("./img/headbutt.png")));
 
     console.log("All Done!");
 });
